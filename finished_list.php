@@ -25,6 +25,31 @@ $isAdmin = $_SESSION['is_admin'];
  // Include the database connection details
 include 'config.php';
 
+// Fetch data from the "finish_add" table with pagination
+$page = isset($_GET['page']) ? $_GET['page'] : 1; // Get the current page number
+$offset = ($page - 1) * $itemsPerPage; // Calculate the offset for the SQL query
+
+$sql = "SELECT product_code, product_name, total FROM finish_add ORDER BY date ASC LIMIT $offset, $itemsPerPage";
+$result = $conn->query($sql);
+
+if ($result->num_rows) {
+    // Create an array to store the data
+    $data = array();
+
+    while ($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+} else {
+    echo "No data found.";
+}
+
+// Get the total number of rows in the table
+$countQuery = "SELECT COUNT(*) as total FROM finish_add";
+$countResult = $conn->query($countQuery);
+$countRow = $countResult->fetch_assoc();
+$totalItems = $countRow['total'];
+
+
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Retrieve data from the HTML form
   $product_code = $_POST["product_code"];
@@ -143,12 +168,12 @@ if (!empty($data)) {
 
     foreach ($data as $row) {
         echo '<tr';
-    
+
         // Check if the total is less than the threshold and apply a style
         if ($row["total"] < $threshold) {
             echo ' style="background-color: red;"';
         }
-    
+
         echo '>';
         echo '<td>' . $row["product_code"] . '</td>';
         echo '<td>' . $row["product_name"] . '</td>';
@@ -162,6 +187,14 @@ if (!empty($data)) {
 
     echo '</tbody>';
     echo '</table><br>';
+
+    // Display pagination links
+    echo '<div style="text-align:center;">';
+    $totalPages = ceil($totalItems / $itemsPerPage);
+    for ($i = 1; $i <= $totalPages; $i++) {
+        echo '<a href="?page=' . $i . '">' . $i . '</a> ';
+    }
+    echo '</div>';
 } else {
     echo 'No items available!!!';
 }
