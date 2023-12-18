@@ -77,6 +77,20 @@ include 'config.php';
             color: white;
             border: none;
         }
+        
+       .pagination-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination-link {
+            margin-right: 5px;
+            padding: 5px 10px;
+            border: 1px solid rgb(255, 136, 0);
+            background-color: #f0f0f0;
+            text-decoration: none;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -159,16 +173,16 @@ if (!empty($data)) {
     echo '</tbody>';
     echo '</table><br>';
 
-     // Display pagination links
-     echo '<div style="text-align:center;">';
-     $totalPages = ceil($totalItems / $itemsPerPage);
-     for ($i = 1; $i <= $totalPages; $i++) {
-         echo '<a href="?page=' . $i . '">' . $i . '</a> ';
-     }
-     echo '</div>';
- } else {
-     echo 'No items available!!!';
- }
+      // Display pagination links at the bottom
+   echo '<div class="pagination-container">';
+    $totalPages = ceil($totalItems / $itemsPerPage);
+    for ($i = 1; $i <= $totalPages; $i++) {
+        echo '<a href="?page=' . $i . '" class="pagination-link">' . $i . '</a>';
+    }
+    echo '</div>';
+} else {
+    echo 'No items available!!!';
+}
  
 ?>
 
