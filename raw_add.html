@@ -62,10 +62,12 @@
                   <input type="text" name="remarks" placeholder="Enter Remarks" required>
                 </div>
       
-                <div class="input-box" >
-                  <span class="details">Given By</span>
-                  <input type="text" name="given_by" required>
-                </div>   
+                <div class="input-box">
+                    <span class="details">Given By</span>
+                    <select name="given_by" id="given_by" required>
+                        <!-- Dropdown options will be populated dynamically -->
+                    </select>
+                </div>  
             </div>
             <div class="button">
                 <input type="submit" value="ADD">
@@ -74,7 +76,27 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
+
+    // Use jQuery to fetch data and populate the dropdown
+    $(document).ready(function () {
+        $.ajax({
+            url: 'fetch_dropdown_data.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var dropdown = $('#given_by');
+                $.each(data, function (index, value) {
+                    dropdown.append($('<option></option>').val(value).text(value));
+                });
+            },
+            error: function () {
+                console.error('Failed to fetch dropdown data.');
+            }
+        });
+    }); 
+
     // Add an event listener to the Product Code input
     document.getElementById("product_code").addEventListener("input", function () {
         var productCode = this.value;
