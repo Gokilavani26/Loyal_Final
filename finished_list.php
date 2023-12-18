@@ -121,6 +121,23 @@ $totalItems = $countRow['total'];
             color: white;
             border: none;
         }
+        .pagination-container {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0px -5px 5px -5px #888; /* Optional: add a shadow for separation */
+        }
+
+        .pagination-link {
+            margin-right: 5px;
+            padding: 5px 10px;
+            border: 1px solid rgb(255, 136, 0);
+            background-color: #f0f0f0;
+            text-decoration: none;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -188,13 +205,13 @@ if (!empty($data)) {
     echo '</tbody>';
     echo '</table><br>';
 
-    // Display pagination links
-    echo '<div style="text-align:center;">';
-    $totalPages = ceil($totalItems / $itemsPerPage);
-    for ($i = 1; $i <= $totalPages; $i++) {
-        echo '<a href="?page=' . $i . '">' . $i . '</a> ';
-    }
-    echo '</div>';
+     // Display pagination links
+     echo '<div class="pagination-container">';
+     $totalPages = ceil($totalItems / $itemsPerPage);
+     for ($i = 1; $i <= $totalPages; $i++) {
+         echo '<a href="?page=' . $i . '" class="pagination-link">' . $i . '</a> ';
+     }
+     echo '</div>';
 } else {
     echo 'No items available!!!';
 }
