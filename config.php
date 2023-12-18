@@ -17,6 +17,10 @@ $adminPassword = "admin123";
 //threshhold for minimum alert
 $threshold = 50;
 
+
+// Set the number of items per page - Pagination
+$itemsPerPage = 2;
+
 // Create a database connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
