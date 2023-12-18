@@ -95,8 +95,21 @@ if (isset($_SESSION['status'])) {
 </a>
 
 <?php
-// Fetch data from the "raw_add" table
-$sql = "SELECT DISTINCT product_code, product_name, quantity, size, department FROM raw_add ORDER BY date ASC";
+
+// Get the total number of rows in the table
+$countQuery = "SELECT COUNT(*) as total FROM raw_add";
+$countResult = $conn->query($countQuery);
+$countRow = $countResult->fetch_assoc();
+$totalItems = $countRow['total'];
+
+// Get the current page number
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+// Calculate the offset for the SQL query
+$offset = ($page - 1) * $itemsPerPage;
+
+// Fetch data from the "raw_add" table with pagination
+$sql = "SELECT DISTINCT product_code, product_name, quantity, size, department FROM raw_add ORDER BY date ASC LIMIT $offset, $itemsPerPage";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -109,12 +122,13 @@ if ($result->num_rows > 0) {
 } else {
     echo "No data found.";
 }
+
 ?>
 
 <h1 style="text-align:center; margin:25px;">Raw Material Stock Table</h1>
 
 <?php
-
+// Display data and pagination links
 if (!empty($data)) {
     echo '<table class="styled-table">';
     echo '<thead><tr><th>Product Code</th><th>Product Name</th><th>Quantity</th>';
@@ -144,10 +158,18 @@ if (!empty($data)) {
 
     echo '</tbody>';
     echo '</table><br>';
-} else {
-    echo 'No items available!!!';
-}
 
+     // Display pagination links
+     echo '<div style="text-align:center;">';
+     $totalPages = ceil($totalItems / $itemsPerPage);
+     for ($i = 1; $i <= $totalPages; $i++) {
+         echo '<a href="?page=' . $i . '">' . $i . '</a> ';
+     }
+     echo '</div>';
+ } else {
+     echo 'No items available!!!';
+ }
+ 
 ?>
 
 </body>
