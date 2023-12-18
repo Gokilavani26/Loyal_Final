@@ -58,10 +58,12 @@
             <span class="details">Total</span>
             <input type="number" name="total" placeholder="Total item" required>
           </div>
-          <div class="input-box" >
+          <div class="input-box">
             <span class="details">Given By</span>
-            <input type="text" name="given_by" placeholder=" " required>
-          </div>            
+            <select name="given_by" id="given_by" required>
+                <!-- Dropdown options will be populated dynamically -->
+            </select>
+        </div>             
           <div class="input-box">
             <span class="details">Remarks</span>
             <input type="text" name="remarks" placeholder="Enter Remarks" required>
@@ -78,5 +80,26 @@
     </div>
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+  
+      // Use jQuery to fetch data and populate the dropdown
+      $(document).ready(function () {
+          $.ajax({
+              url: 'fetch_dropdown_data.php',
+              type: 'GET',
+              dataType: 'json',
+              success: function (data) {
+                  var dropdown = $('#given_by');
+                  $.each(data, function (index, value) {
+                      dropdown.append($('<option></option>').val(value).text(value));
+                  });
+              },
+              error: function () {
+                  console.error('Failed to fetch dropdown data.');
+              }
+          });
+      }); 
+    </script>
 </body>
 </html>
